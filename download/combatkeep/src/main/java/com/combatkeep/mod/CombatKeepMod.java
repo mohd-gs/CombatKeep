@@ -46,12 +46,12 @@ public class CombatKeepMod implements ModInitializer {
         /** Combat tag duration in seconds */
         public static final int COMBAT_TAG_DURATION_SECONDS = 15;
 
-        /** Combat tag duration in milliseconds */
-        public static final long COMBAT_TAG_DURATION_MS = COMBAT_TAG_DURATION_SECONDS * 1000L;
+        /** Combat tag duration in ticks (20 ticks per second) */
+        public static final int COMBAT_TAG_DURATION_TICKS = COMBAT_TAG_DURATION_SECONDS * 20;
 
         // ========== Combat Tracking ==========
 
-        /** Players currently in combat: UUID -> combat end timestamp (millis) */
+        /** Players currently in combat: UUID -> combat end tick (game ticks) */
         private static final Map<UUID, Long> combatTaggedPlayers = new HashMap<>();
 
         /** Combat pairs: player UUID -> opponent UUID */
@@ -192,6 +192,8 @@ public class CombatKeepMod implements ModInitializer {
                                         // Clean up partner data even if opponent is offline
                                         combatPartners.remove(opponentUuid);
                                         combatTaggedPlayers.remove(opponentUuid);
+                                        // Clean up opponent's boss bar (handles offline opponent case)
+                                        bossBarManager.removeByUuid(opponentUuid);
                                 }
 
                                 removeCombatTag(player);
@@ -236,12 +238,21 @@ public class CombatKeepMod implements ModInitializer {
                         // Clean up pending death penalties to prevent memory leak
                         // (player died but disconnected before respawning)
                         DeathData staleDeath = pendingDeathPenalties.remove(uuid);
-                        if (staleDeath != null && !staleDeath.wasCombatTagged) {
-                                // Apply normal death XP loss since they left before respawning
-                                player.setExperienceLevel(0);
-                                player.setExperiencePoints(0);
-                                LOGGER.info("Player '{}' disconnected before respawn - XP penalty applied",
-                                        player.getNameForScoreboard());
+                        if (staleDeath != null) {
+                                if (staleDeath.wasCombatTagged) {
+                                        // Died in combat, disconnected before respawn — apply full combat penalty
+                                        // (This closes the exploit where players could escape combat death penalty
+                                        // by disconnecting on the death screen before clicking respawn)
+                                        applyCombatQuitPenalty(player);
+                                        LOGGER.info("Player '{}' disconnected before respawn after combat death — combat penalty applied",
+                                                player.getNameForScoreboard());
+                                } else {
+                                        // Normal death, disconnected before respawn — XP only loss
+                                        player.setExperienceLevel(0);
+                                        player.setExperiencePoints(0);
+                                        LOGGER.info("Player '{}' disconnected before respawn — XP penalty applied",
+                                                player.getNameForScoreboard());
+                                }
                         }
 
                         if (isCombatTagged(player)) {
@@ -264,6 +275,8 @@ public class CombatKeepMod implements ModInitializer {
                                         // Clean up opponent data even if offline
                                         combatPartners.remove(opponentUuid);
                                         combatTaggedPlayers.remove(opponentUuid);
+                                        // Clean up opponent's boss bar (handles offline opponent case)
+                                        bossBarManager.removeByUuid(opponentUuid);
                                 }
 
                                 applyCombatQuitPenalty(player);
@@ -277,17 +290,17 @@ public class CombatKeepMod implements ModInitializer {
          */
         private void registerCombatTagChecker() {
                 ServerTickEvents.END_SERVER_TICK.register(server -> {
-                        long now = System.currentTimeMillis();
+                        long currentTick = server.getTicks();
                         Iterator<Map.Entry<UUID, Long>> iterator = combatTaggedPlayers.entrySet().iterator();
 
                         while (iterator.hasNext()) {
                                 Map.Entry<UUID, Long> entry = iterator.next();
                                 UUID uuid = entry.getKey();
-                                long endTime = entry.getValue();
+                                long endTick = entry.getValue();
 
                                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
 
-                                if (now >= endTime) {
+                                if (currentTick >= endTick) {
                                         // Combat tag expired
                                         iterator.remove();
                                         combatPartners.remove(uuid);
@@ -299,10 +312,13 @@ public class CombatKeepMod implements ModInitializer {
                                                                 .formatted(Formatting.GREEN),
                                                         true
                                                 );
+                                        } else {
+                                                // Player is offline — clean up Boss Bar by UUID to prevent memory leak
+                                                bossBarManager.removeByUuid(uuid);
                                         }
                                 } else if (player != null) {
                                         // Update boss bar
-                                        int remaining = (int) Math.ceil((endTime - now) / 1000.0);
+                                        int remaining = (int) Math.ceil((endTick - currentTick) / 20.0);
                                         bossBarManager.updateBossBar(player, remaining);
                                 }
                         }
@@ -315,12 +331,15 @@ public class CombatKeepMod implements ModInitializer {
          * Tag both players for combat. Timer resets to 15 seconds on each call.
          */
         public static void tagPlayerForCombat(ServerPlayerEntity attacker, ServerPlayerEntity target) {
-                long combatEnd = System.currentTimeMillis() + COMBAT_TAG_DURATION_MS;
+                MinecraftServer server = attacker.getServer();
+                if (server == null) return;
 
-                combatTaggedPlayers.put(attacker.getUuid(), combatEnd);
+                long combatEndTick = server.getTicks() + COMBAT_TAG_DURATION_TICKS;
+
+                combatTaggedPlayers.put(attacker.getUuid(), combatEndTick);
                 combatPartners.put(attacker.getUuid(), target.getUuid());
 
-                combatTaggedPlayers.put(target.getUuid(), combatEnd);
+                combatTaggedPlayers.put(target.getUuid(), combatEndTick);
                 combatPartners.put(target.getUuid(), attacker.getUuid());
 
                 // Show boss bars
@@ -332,12 +351,12 @@ public class CombatKeepMod implements ModInitializer {
                 String targetName = target.getNameForScoreboard();
 
                 attacker.sendMessage(
-                        Text.literal("⚔ Combat Tag vs " + targetName + " - 15s!")
+                        Text.literal("⚔ Combat Tag vs " + targetName + " - " + COMBAT_TAG_DURATION_SECONDS + "s!")
                                 .formatted(Formatting.RED, Formatting.BOLD),
                         true
                 );
                 target.sendMessage(
-                        Text.literal("⚔ Combat Tag vs " + attackerName + " - 15s!")
+                        Text.literal("⚔ Combat Tag vs " + attackerName + " - " + COMBAT_TAG_DURATION_SECONDS + "s!")
                                 .formatted(Formatting.RED, Formatting.BOLD),
                         true
                 );
@@ -347,18 +366,23 @@ public class CombatKeepMod implements ModInitializer {
          * Check if a player is currently combat-tagged.
          */
         public static boolean isCombatTagged(ServerPlayerEntity player) {
-                Long endTime = combatTaggedPlayers.get(player.getUuid());
-                return endTime != null && System.currentTimeMillis() < endTime;
+                Long endTick = combatTaggedPlayers.get(player.getUuid());
+                if (endTick == null) return false;
+                MinecraftServer server = player.getServer();
+                if (server == null) return false;
+                return server.getTicks() < endTick;
         }
 
         /**
          * Get remaining combat time in seconds.
          */
         public static int getRemainingCombatTime(ServerPlayerEntity player) {
-                Long endTime = combatTaggedPlayers.get(player.getUuid());
-                if (endTime == null) return 0;
-                long remaining = endTime - System.currentTimeMillis();
-                return remaining > 0 ? (int) Math.ceil(remaining / 1000.0) : 0;
+                Long endTick = combatTaggedPlayers.get(player.getUuid());
+                if (endTick == null) return 0;
+                MinecraftServer server = player.getServer();
+                if (server == null) return 0;
+                long remaining = endTick - server.getTicks();
+                return remaining > 0 ? (int) Math.ceil(remaining / 20.0) : 0;
         }
 
         /**
