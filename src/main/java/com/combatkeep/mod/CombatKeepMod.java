@@ -154,6 +154,7 @@ public class CombatKeepMod implements ModInitializer {
          * On player death: store death data for processing on respawn.
          * - Combat death: will lose 50% items + XP on respawn
          * - Normal death: will lose only XP on respawn
+         * Also removes combat tag from BOTH players when one dies in combat.
          */
         private void registerDeathCallback() {
                 ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
@@ -170,6 +171,29 @@ public class CombatKeepMod implements ModInitializer {
 
                         if (wasCombatTagged) {
                                 LOGGER.info("Player '{}' died while combat-tagged", player.getNameForScoreboard());
+
+                                // Remove combat tag from the OPPONENT too — the fight is over
+                                UUID opponentUuid = combatPartners.get(player.getUuid());
+                                if (opponentUuid != null) {
+                                        // Get the server from the player's world
+                                        MinecraftServer server = player.getServer();
+                                        if (server != null) {
+                                                ServerPlayerEntity opponent = server.getPlayerManager().getPlayer(opponentUuid);
+                                                if (opponent != null) {
+                                                        // Remove opponent's combat tag and boss bar
+                                                        removeCombatTag(opponent);
+                                                        opponent.sendMessage(
+                                                                Text.literal("Your opponent died in combat! You are safe now.")
+                                                                        .formatted(Formatting.GREEN),
+                                                                true
+                                                        );
+                                                }
+                                        }
+                                        // Clean up partner data even if opponent is offline
+                                        combatPartners.remove(opponentUuid);
+                                        combatTaggedPlayers.remove(opponentUuid);
+                                }
+
                                 removeCombatTag(player);
                         } else {
                                 LOGGER.info("Player '{}' died normally (XP only loss)", player.getNameForScoreboard());
@@ -200,18 +224,32 @@ public class CombatKeepMod implements ModInitializer {
         }
 
         /**
-         * On player disconnect: if combat-tagged, apply combat quit penalty.
-         * Also notify the opponent that their combat partner has logged out.
+         * On player disconnect:
+         * - If combat-tagged: apply combat quit penalty, notify opponent, clean up
+         * - Clean up any pending death penalties to prevent memory leaks
          */
         private void registerDisconnectCallback() {
                 ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
                         ServerPlayerEntity player = handler.getPlayer();
+                        UUID uuid = player.getUuid();
+
+                        // Clean up pending death penalties to prevent memory leak
+                        // (player died but disconnected before respawning)
+                        DeathData staleDeath = pendingDeathPenalties.remove(uuid);
+                        if (staleDeath != null && !staleDeath.wasCombatTagged) {
+                                // Apply normal death XP loss since they left before respawning
+                                player.setExperienceLevel(0);
+                                player.setExperiencePoints(0);
+                                LOGGER.info("Player '{}' disconnected before respawn - XP penalty applied",
+                                        player.getNameForScoreboard());
+                        }
+
                         if (isCombatTagged(player)) {
                                 LOGGER.info("Player '{}' disconnected while combat-tagged - applying quit penalty",
                                         player.getNameForScoreboard());
 
                                 // Notify the opponent before removing the tag
-                                UUID opponentUuid = combatPartners.get(player.getUuid());
+                                UUID opponentUuid = combatPartners.get(uuid);
                                 if (opponentUuid != null) {
                                         ServerPlayerEntity opponent = server.getPlayerManager().getPlayer(opponentUuid);
                                         if (opponent != null) {
@@ -220,9 +258,12 @@ public class CombatKeepMod implements ModInitializer {
                                                                 .formatted(Formatting.GOLD),
                                                         false
                                                 );
-                                                // Also remove the combat tag from the opponent since the fight is over
+                                                // Remove the combat tag from the opponent since the fight is over
                                                 removeCombatTag(opponent);
                                         }
+                                        // Clean up opponent data even if offline
+                                        combatPartners.remove(opponentUuid);
+                                        combatTaggedPlayers.remove(opponentUuid);
                                 }
 
                                 applyCombatQuitPenalty(player);
