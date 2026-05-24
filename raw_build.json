@@ -1,0 +1,18 @@
+{
+  "code": 200,
+  "data": {
+    "description": "",
+    "html": "<html><head><meta name=\"color-scheme\" content=\"light dark\"></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">plugins {\n\tid 'net.fabricmc.fabric-loom' version \"${loom_version}\"\n\tid 'maven-publish'\n}\n\nversion = project.mod_version\ngroup = project.maven_group\n\nrepositories {\n\t// Add repositories to retrieve artifacts from in here.\n\t// You should only use this when depending on other mods because\n\t// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.\n\t// See https://docs.gradle.org/current/userguide/declaring_repositories.html\n\t// for more information about repositories.\n}\n\nloom {\n\tsplitEnvironmentSourceSets()\n\n\tmods {\n\t\t\"modid\" {\n\t\t\tsourceSet sourceSets.main\n\t\t\tsourceSet sourceSets.client\n\t\t}\n\t}\n\n}\n\ndependencies {\n\t// To change the versions see the gradle.properties file\n\tminecraft \"com.mojang:minecraft:${project.minecraft_version}\"\n\t\n\timplementation \"net.fabricmc:fabric-loader:${project.loader_version}\"\n\n\t// Fabric API. This is technically optional, but you probably want it anyway.\n\timplementation \"net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}\"\n\t\n}\n\nprocessResources {\n\tdef version = project.version\n\tinputs.property \"version\", version\n\n\tfilesMatching(\"fabric.mod.json\") {\n\t\texpand \"version\": version\n\t}\n}\n\ntasks.withType(JavaCompile).configureEach {\n\tit.options.release = 25\n}\n\njava {\n\t// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the \"build\" task\n\t// if it is present.\n\t// If you remove this line, sources will not be generated.\n\twithSourcesJar()\n\n\tsourceCompatibility = JavaVersion.VERSION_25\n\ttargetCompatibility = JavaVersion.VERSION_25\n}\n\njar {\n\tdef projectName = project.name\n\tinputs.property \"projectName\", projectName\n\n\tfrom(\"LICENSE\") {\n\t\trename { \"${it}_$projectName\"}\n\t}\n}\n\n// configure the maven publication\npublishing {\n\tpublications {\n\t\tcreate(\"mavenJava\", MavenPublication) {\n\t\t\tfrom components.java\n\t\t}\n\t}\n\n\t// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.\n\trepositories {\n\t\t// Add repositories to publish to here.\n\t\t// Notice: This block does NOT have the same function as the block in the top level.\n\t\t// The repositories here will be used for publishing your artifact, not for\n\t\t// retrieving dependencies.\n\t}\n}\n</pre></body></html>",
+    "title": "",
+    "url": "https://raw.githubusercontent.com/FabricMC/fabric-example-mod/26.1.2/build.gradle",
+    "usage": {
+      "tokens": 552
+    }
+  },
+  "meta": {
+    "usage": {
+      "tokens": 552
+    }
+  },
+  "status": 20000
+}

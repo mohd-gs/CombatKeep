@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://docs.fabricmc.net/develop/porting",
+    "name": "Porting to 26.1 | Fabric Documentation",
+    "snippet": "Guidelines for porting to Minecraft 26.1, the latest version of Minecraft. The 26.1 version of Minecraft is unobfuscated, as were its snapshots.",
+    "host_name": "docs.fabricmc.net",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.fabricmc.net/develop/loom",
+    "name": "Loom - Fabric Documentation",
+    "snippet": "Plugin IDs ​. Loom uses multiple different plugin IDs: net.fabricmc.fabric-loom , for non-obfuscated versions (Minecraft 26.1 or newer); net.",
+    "host_name": "docs.fabricmc.net",
+    "rank": 1,
+    "date": "May 21, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://fabricmc.net/2026/03/14/261.html",
+    "name": "Fabric for Minecraft 26.1",
+    "snippet": "As mappings are not provided for 26.1, developers should switch from the old net.fabricmc.fabric-loom-remap or fabric-loom plugins to the new ...",
+    "host_name": "fabricmc.net",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=TaKiWSXzE4o",
+    "name": "Upgrade to Fabric 26.1: Loom Plugin ID, fabricApi, Repository",
+    "snippet": "Facing cryptic errors after upgrading your Fabric mod to Minecraft 26.1? The Fabric development ecosystem is constantly evolving, ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.fabricmc.net/develop/loom/options",
+    "name": "Loom Options - Fabric Documentation",
+    "snippet": "This page contains a reference for all options present in the loom Gradle extension. Please see the Fabric API DSL page for options related to Fabric API ...",
+    "host_name": "docs.fabricmc.net",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

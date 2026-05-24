@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=4sCxilcudKE",
+    "name": "25+ of the BEST server-side mods for FABRIC SMPs (1.21+)",
+    "snippet": "... Tags 🏷️: Minecraft server tutorial server free free server fabric server 1.21 new mods for server server mods create mod server origins server ...",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/fabricmc/comments/gzi66b/looking_for_a_serverside_mod_to_enable",
+    "name": "Looking for a server-side mod to enable keepInventory, but  - Reddit",
+    "snippet": "Is there a mod that allows only some players to keep their inventory upon death, while others don't?",
+    "host_name": "www.reddit.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/supsm/fabric-serverside-mods",
+    "name": "supsm/fabric-serverside-mods: List of Fabric server side mods - GitHub",
+    "snippet": "These mods make significant changes that may impact behaviour in-game, or reduce the work done (eg ticking, chunk loading) by the server.",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=7uDjLJtVd44",
+    "name": "20+ Client Side Mods For Minecraft! (1.21.8) - YouTube",
+    "snippet": "Today I'm showcasing over 20 Client Side mods for Minecraft Chase The Skies! It's been well over a year since my last client mod showcase, ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://modrinth.com/project/73Hlq8xM",
+    "name": "Individual Keep Inventory (Updated) - Minecraft Mod - Modrinth",
+    "snippet": "This is the updated version of Individual Keep Inventory which is a Server-side Fabric mod that makes keepInventory work on an individual basis.",
+    "host_name": "modrinth.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=cLcrt85sK6o",
+    "name": "1.21.6 Fabric Server Setup Guide | Minecraft | High Performance",
+    "snippet": "A simple video that explains downloading and setting up your own Fabric server for 1.21.6! Host your own Minecraft 1.21.6 server with Apex ...",
+    "host_name": "www.youtube.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.curseforge.com/minecraft/mc-mods/darkinventory",
+    "name": "DarkInventory - RPG Keep Inventory On - Minecraft Mods",
+    "snippet": "A simple keep inventory on mod. Never lose your items! Server side is supported. You can install this on the server and not need to have it installed on the ...",
+    "host_name": "www.curseforge.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://gist.github.com/momokinou/c8976d8620de67fcd21ca16579671a69",
+    "name": "Useful Fabric server side mods - GitHub Gist",
+    "snippet": "If you're interested in developing server side Fabric mods, check out the Fabric Server-side Development discord, and ping me (comp500#7396) if you find a ...",
+    "host_name": "gist.github.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.tiktok.com/@scalacubehosting/video/7388254435983625505",
+    "name": "How to create a fabric server by Scalacube? #minecraft  - TikTok",
+    "snippet": "en minecraft java. existe un mod en el que puedes invitar a tus amigos. a tu mundo como si fuese bedrock. y todo esto sin necesidad de tener un ...",
+    "host_name": "www.tiktok.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://serverside.infra.link/modrinth/any",
+    "name": "Quilt Server-side Mods",
+    "snippet": "A list of server-side mods for the Quilt mod loader; including many Fabric mods (which are compatible with Quilt) and some Quilt-only mods. View the source and ...",
+    "host_name": "serverside.infra.link",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

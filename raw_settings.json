@@ -1,0 +1,18 @@
+{
+  "code": 200,
+  "data": {
+    "description": "",
+    "html": "<html><head><meta name=\"color-scheme\" content=\"light dark\"></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">pluginManagement {\n\trepositories {\n\t\tmaven {\n\t\t\tname = 'Fabric'\n\t\t\turl = 'https://maven.fabricmc.net/'\n\t\t}\n\t\tmavenCentral()\n\t\tgradlePluginPortal()\n\t}\n}\n\n// Should match your modid\nrootProject.name = 'modid'\n</pre></body></html>",
+    "title": "",
+    "url": "https://raw.githubusercontent.com/FabricMC/fabric-example-mod/26.1.2/settings.gradle",
+    "usage": {
+      "tokens": 104
+    }
+  },
+  "meta": {
+    "usage": {
+      "tokens": 104
+    }
+  },
+  "status": 20000
+}

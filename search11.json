@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=Cad65lR1Y2g",
+    "name": "TOP 26+ Minecraft Mods for 26.1.1 (Forge/Fabric) - YouTube",
+    "snippet": "Finally managed to compile a list of 26 mods for 26 in 2026, enjoy it! My ModPack with over 150 Fresh Animations projects: ...",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=prmfHi5zlC4",
+    "name": "How To Make a Fabric Server (Minecraft 26.1) - YouTube",
+    "snippet": "Discover how to make a Minecraft Fabric server in 26.1 and start playing Fabric mods with your friends. Everything is covered in this video ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.curseforge.com/minecraft/mc-mods/better-combat-by-daedelus",
+    "name": "Better Combat [Fabric & Forge] - Minecraft Mods - CurseForge",
+    "snippet": "This mod includes several one-handed, two-handed and dual wielded attack animation resources. Accurate weapon collision detection.",
+    "host_name": "www.curseforge.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://modrinth.com/project/SrIMoh9C",
+    "name": "OutCombatLog - Minecraft Plugin - Modrinth",
+    "snippet": "The most advanced combat logging prevention plugin for Minecraft. Beautiful BossBar timers, item cooldowns, command blocking, and complete customization for ...",
+    "host_name": "modrinth.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/orgs/FabricMC/discussions/2471",
+    "name": "How Do I Make A Boss Entity So It Can Show A Bossbar in game",
+    "snippet": "A boss is just an entity/mob that is difficult to kill. For the boss bar, you need to use a ServerBossBar in your entity.\nFor the boss bar, you need to use a ServerBossBar in your entity. e.g. look at WitherEntity.bossBar and its uses in that class",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

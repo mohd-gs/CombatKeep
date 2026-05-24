@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://fabricmc.net/2026/03/14/261.html",
+    "name": "Fabric for Minecraft 26.1",
+    "snippet": "Fabric API no longer provides the fabric mod ID, which was deprecated more than three years ago. If your mod's fabric.mod.json depends on fabric ...",
+    "host_name": "fabricmc.net",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=rx9AJBb1ors",
+    "name": "How To Download & Install Fabric (Minecraft 26.1.2) - YouTube",
+    "snippet": "That is because Fabric has become the top Minecraft mod loader for modern versions. ... This is an API mod that is required for most mods to work.",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://modrinth.com/project/P7dR8mSH",
+    "name": "Fabric API - Minecraft Mod - Modrinth",
+    "snippet": "Lightweight and modular API providing common hooks and intercompatibility measures utilized by mods using the Fabric toolchain.",
+    "host_name": "modrinth.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/fabricmc/comments/1sjbvsy/im_trying_to_update_fabric_so_i_can_use_realms",
+    "name": "Im trying to update fabric so I can use realms. How do fix this error?",
+    "snippet": "I installed a new version of fabric and replaced the API but how to do use 26.1.2 Incompatible mods found!…",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=mODmb4TRf9E",
+    "name": "How To Install Fabric Mods In Minecraft 26.1 | Step By Step - YouTube",
+    "snippet": "net Download Fabric API: https://www.curseforge.com/minecraft/mc-mods/fabric-api Download Sodium: https://modrinth.com/mod/sodium ...",
+    "host_name": "www.youtube.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.curseforge.com/minecraft/mc-mods/fabric-api",
+    "name": "Fabric API - Minecraft Mods - CurseForge",
+    "snippet": "Fabric API is the core library for the most common hooks and inter-compatibility measures utilized by mods using the Fabric toolchain.",
+    "host_name": "www.curseforge.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/FabricMC/fabric-api",
+    "name": "FabricMC/fabric-api: Essential hooks for modding with Fabric. - GitHub",
+    "snippet": "Fabric API is a mod like any other Fabric mod which requires Fabric Loader to be installed. For support and discussion for both developers and users, visit the ...",
+    "host_name": "github.com",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/fabricmc/comments/1sktqsd/i_have_fabric_installed_but_i_need_to_install_any",
+    "name": "I have Fabric Installed but I “need to install any version of Fabric.”",
+    "snippet": "Best mods for Minecraft Fabric 26.1.2. Recommendations for Fabric API 26.1.2. Comparison of Fabric loader versions. Tips for updating Minecraft ...",
+    "host_name": "www.reddit.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=sH2wMpxxgpE",
+    "name": "How To Download Fabric for Minecraft 26.1 - YouTube",
+    "snippet": "Just make sure that any mods you download are for the Fabric mod loader and for Minecraft 26.1 specifically. ... This is an API mod that is ...",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/fabricmc/hot",
+    "name": "All about Fabric and Minecraft - Reddit",
+    "snippet": "This mod is built for Fabric 0.19.2 and Minecraft 26.1.2. It works in singleplayer; for multiplayer, the mod must be installed on both the server and client. - ...",
+    "host_name": "www.reddit.com",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]

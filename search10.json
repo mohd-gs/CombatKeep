@@ -1,0 +1,47 @@
+[
+  {
+    "url": "https://maven.fabricmc.net/docs/fabric-api-0.57.2+1.19.1/net/fabricmc/fabric/api/event/player/AttackEntityCallback.html",
+    "name": "AttackEntityCallback (fabric-api 0.57.2+1.19.1 API)",
+    "snippet": "Callback for left-clicking (\"attacking\") an entity. Is hooked in before the spectator check, so make sure to check for the player's game mode as well!",
+    "host_name": "maven.fabricmc.net",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=RzqBoHGEgOY",
+    "name": "Fabric Modding Tutorial - Minecraft 1.21: Explaining Events | #23",
+    "snippet": "In this Minecraft Modding Tutorial, we are looking at Events with Fabric from Minecraft 1.21.1 == 1.21 MODDING COURSES == ▶️ NeoForge Modding ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://modrinth.com/mod/fabric-api/changelog?page=2",
+    "name": "Fabric API - Changelog - Modrinth",
+    "snippet": "Fabric API. Lightweight and modular API providing common hooks and intercompatibility measures utilized by mods using the Fabric toolchain.",
+    "host_name": "modrinth.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://fabricmc.docs.concern.i.ng/fabric-events-interaction-v0/fabric-events-interaction-v0/net.fabricmc.fabric.api.event.player/-attack-entity-callback/index.html",
+    "name": "AttackEntityCallback",
+    "snippet": "Callback for left-clicking (\"attacking\") an entity. Is hooked in before the spectator check, so make sure to check for the player's game mode as well!",
+    "host_name": "fabricmc.docs.concern.i.ng",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/FabricMC/fabric-api/issues/1870",
+    "name": "fabric-events-interaction-v0: UseEntityCallback cancelling not",
+    "snippet": "EVENT callback and returning a ActionResult.FAIL doesn't actually prevent the entire entity interaction. The mixin seems to only be listening to ...",
+    "host_name": "github.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "code": 200,
+  "data": {
+    "description": "",
+    "html": "<html><head><meta name=\"color-scheme\" content=\"light dark\"></head><body><pre style=\"word-wrap: break-word; white-space: pre-wrap;\">{\n\t\"schemaVersion\": 1,\n\t\"id\": \"modid\",\n\t\"version\": \"${version}\",\n\t\"name\": \"Example Mod\",\n\t\"description\": \"This is an example description! Tell everyone what your mod is about!\",\n\t\"authors\": [\n\t\t\"Me!\"\n\t],\n\t\"contact\": {\n\t\t\"homepage\": \"https://fabricmc.net/\",\n\t\t\"sources\": \"https://github.com/FabricMC/fabric-example-mod\"\n\t},\n\t\"license\": \"CC0-1.0\",\n\t\"icon\": \"assets/modid/icon.png\",\n\t\"environment\": \"*\",\n\t\"entrypoints\": {\n\t\t\"main\": [\n\t\t\t\"com.example.ExampleMod\"\n\t\t],\n\t\t\"client\": [\n\t\t\t\"com.example.client.ExampleModClient\"\n\t\t]\n\t},\n\t\"mixins\": [\n\t\t\"modid.mixins.json\",\n\t\t{\n\t\t\t\"config\": \"modid.client.mixins.json\",\n\t\t\t\"environment\": \"client\"\n\t\t}\n\t],\n\t\"depends\": {\n\t\t\"fabricloader\": \">=0.19.2\",\n\t\t\"minecraft\": \"~26.1.2\",\n\t\t\"java\": \">=25\",\n\t\t\"fabric-api\": \"*\"\n\t}\n}</pre></body></html>",
+    "title": "",
+    "url": "https://raw.githubusercontent.com/FabricMC/fabric-example-mod/26.1.2/src/main/resources/fabric.mod.json",
+    "usage": {
+      "tokens": 308
+    }
+  },
+  "meta": {
+    "usage": {
+      "tokens": 308
+    }
+  },
+  "status": 20000
+}

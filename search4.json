@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://docs.fabricmc.net/develop/loom",
+    "name": "Loom - Fabric Documentation",
+    "snippet": "Loom provides utilities to install Minecraft and mods in a development environment so that you can link against them with respect to Minecraft obfuscation.",
+    "host_name": "docs.fabricmc.net",
+    "rank": 0,
+    "date": "May 21, 2026",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=TaKiWSXzE4o",
+    "name": "Upgrade to Fabric 26.1: Loom Plugin ID, fabricApi, Repository",
+    "snippet": "... api, mod loader, modrinth, curseforge, minecraft mod, mod develop ... 🛠️ Establishing a robust Gradle repository setup, prioritizing and ...",
+    "host_name": "www.youtube.com",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://github.com/FabricMC/fabric-example-mod/blob/26.1.2/build.gradle",
+    "name": "fabric-example-mod/build.gradle at 26.1.2 - GitHub",
+    "snippet": "// Loom adds the essential maven repositories to download Minecraft and libraries from automatically. // See https://docs.gradle.org/current/userguide/ ...",
+    "host_name": "github.com",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/fabricmc/comments/rqmahd/problem_with_fabricloom_when_building_fabric_mod",
+    "name": "problem with fabric-loom when building fabric mod : r/fabricmc - Reddit",
+    "snippet": "Java 16 or higher is required. You can change the Java version in the Gradle settings dialog. My gradle settings (and JAVA_HOME etc) are all set ...",
+    "host_name": "www.reddit.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2938545-18w50a-getting-started-with-fabric",
+    "name": "[18w50a] Getting Started with Fabric - Mapping and Modding Tutorials",
+    "snippet": "This is an unofficial guide to setting up a development workspace for Fabric, a new, open-source modloader by asiekierka.",
+    "host_name": "www.minecraftforum.net",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=x7cPbAFv19E",
+    "name": "Minecraft 1.16.4: Fabric Modding Tutorial - Workspace Setup (#1)",
+    "snippet": "This tutorial series will cover building a Minecraft Mod from scratch using the Fabric API! In this episode, we setup our workspace and ...",
+    "host_name": "www.youtube.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://docs.fabricmc.net/develop/porting",
+    "name": "Porting to 26.1 | Fabric Documentation",
+    "snippet": "If you specify Loom in settings.gradle , change it there as well. Remove the mappings line from the dependencies section of build.gradle .",
+    "host_name": "docs.fabricmc.net",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=7i_rtkj67qk",
+    "name": "Fabric Modding Tutorial - Minecraft 26.1: Workspace Setup | #1",
+    "snippet": "... Modding with Minecraft 1.21.X: https://url.kaupenjoe.net/CourseForge121X == COMPATIBILITY == ✓ Compatible with 26.1.2 == ASSETS & DOWNLOAD ...",
+    "host_name": "www.youtube.com",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=rx9AJBb1ors",
+    "name": "How To Download & Install Fabric (Minecraft 26.1.2) - YouTube",
+    "snippet": "THIS IS THE ABOLUTE BEST AND MOST CONSISTENTLY UPDATED MINECRAFT MOD HELP/TUTORIAL CHANNEL OUT THERE!!!!! I BEEN A FAN AND IMMA STAY A FAN!!",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://discuss.gradle.org/t/help-i-just-started-making-my-first-minecraft-fabric-mod/42019",
+    "name": "Help i just started making my first minecraft fabric mod - Gradle Forums",
+    "snippet": "The project requires Java 17, but you're using an older version. Try updating the JDK on your machine (or reconfigure which JDK should be used).",
+    "host_name": "discuss.gradle.org",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
