@@ -3,7 +3,7 @@
 # ⚔️ CombatKeep
 
 [![Platform](https://img.shields.io/badge/Platform-Fabric-blue.svg)](https://fabricmc.net/)
-[![Minecraft Version](https://img.shields.io/badge/Minecraft-26.1.2-green.svg)](https://www.minecraft.net/)
+[![Minecraft Version](https://img.shields.io/badge/Minecraft-26.1.x-green.svg)](https://www.minecraft.net/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com/mohammad-salah-qasiaa/CombatKeep/releases)
 [![Server Side](https://img.shields.io/badge/Side-Server--Only-red.svg)](https://fabricmc.net/)
@@ -11,7 +11,7 @@
 
 **Keep your items. Pay the price if you die fighting.**
 
-A server-side Fabric mod for Minecraft 26.1.2 that enables permanent KeepInventory while adding a punishing combat system — players who die in combat lose half their inventory, and those who try to log out to escape will face the same fate.
+A server-side Fabric mod for Minecraft 26.1.x (26.1.1 / 26.1.2) that enables permanent KeepInventory while adding a punishing combat system — players who die in combat lose half their inventory, and those who try to log out to escape will face the same fate.
 
 </div>
 
@@ -71,7 +71,7 @@ If a player disconnects while combat-tagged:
 
 | Dependency | Version |
 |---|---|
-| Minecraft Java Edition | 26.1.2 |
+| Minecraft Java Edition | 26.1.1 / 26.1.2 |
 | Fabric Loader | ≥ 0.19.2 |
 | Fabric API | 0.149.1+26.1.2 |
 | Java | 25+ |
@@ -83,7 +83,7 @@ If a player disconnects while combat-tagged:
 ## 📥 Installation
 
 1. Make sure **Fabric Loader 0.19.2+** is installed on your server
-2. Download **Fabric API** for 26.1.2 from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
+2. Download **Fabric API** for 26.1.x from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 3. Place `combatkeep-1.0.0.jar` and the Fabric API `.jar` into your server's `mods/` folder
 4. Restart the server — that's it!
 
@@ -167,9 +167,9 @@ combatkeep/
 ## ⚙️ Technical Notes
 
 <details>
-<summary>For developers — Minecraft 26.1.2 changes</summary>
+<summary>For developers — Minecraft 26.1.x changes</summary>
 
-Minecraft 26.1.2 introduces several breaking changes compared to older Fabric setups:
+Minecraft 26.1 introduces several breaking changes compared to older Fabric setups:
 
 | Change | Old | New |
 |---|---|---|
@@ -182,6 +182,24 @@ Minecraft 26.1.2 introduces several breaking changes compared to older Fabric se
 Because the game is now unobfuscated, the `mappings` block in `dependencies` has been removed entirely.
 
 </details>
+
+---
+
+## 📝 Changelog
+
+### v1.0.0 — Initial Release
+- ⚔️ Combat tag system with 15-second timer
+- 🛡️ Automatic KeepInventory enforcement
+- 💀 Combat death penalty (50% items + all XP)
+- 🚪 Combat log penalty
+- 📦 Armor and Shulker Box protection
+- 📊 Boss Bar display with color transitions
+
+### v1.0.0-hotfix1 — Bug Fixes
+- 🐛 **Fixed:** Mod now works on both Minecraft **26.1.1 and 26.1.2** (was limited to 26.1.2 only)
+- 🐛 **Fixed:** Opponent's combat tag and Boss Bar are now properly removed when their partner dies in combat (was leaving ghost tags)
+- 🐛 **Fixed:** Memory leak when players disconnect before respawning — `pendingDeathPenalties` is now cleaned up on disconnect
+- 🐛 **Fixed:** XP loss is now properly applied when a player disconnects while dead but before clicking Respawn
 
 ---
 
