@@ -5,9 +5,8 @@
 [![Platform](https://img.shields.io/badge/Platform-Fabric-blue.svg)](https://fabricmc.net/)
 [![Minecraft Version](https://img.shields.io/badge/Minecraft-26.1.2-green.svg)](https://www.minecraft.net/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com/mohammad-salah-qasiaa/CombatKeep/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](https://github.com/YOUR_USERNAME/combatkeep/releases)
 [![Server Side](https://img.shields.io/badge/Side-Server--Only-red.svg)](https://fabricmc.net/)
-[![Modrinth](https://img.shields.io/badge/Modrinth-Coming_Soon-1bd96c.svg)](https://modrinth.com/)
 
 **Keep your items. Pay the price if you die fighting.**
 
@@ -95,8 +94,8 @@ If a player disconnects while combat-tagged:
 
 ```bash
 # Clone the repository
-git clone https://github.com/mohammad-salah-qasiaa/CombatKeep.git
-cd CombatKeep
+git clone https://github.com/YOUR_USERNAME/combatkeep.git
+cd combatkeep
 
 # Build the mod
 ./gradlew build
@@ -188,7 +187,7 @@ Because the game is now unobfuscated, the `mappings` block in `dependencies` has
 ## 🤝 Contributing
 
 Found a bug or have a suggestion? Feel free to:
-- 🐛 [Open an issue](https://github.com/mohammad-salah-qasiaa/CombatKeep/issues)
+- 🐛 [Open an issue](https://github.com/YOUR_USERNAME/combatkeep/issues)
 - 🔧 Submit a pull request
 
 ---
