@@ -1,0 +1,92 @@
+[
+  {
+    "url": "https://www.youtube.com/watch?v=HqwNepcqAd4",
+    "name": "Tiny Hotfix-over - What's New in Minecraft 26.1.1? - YouTube",
+    "snippet": "... minecraft.net/en-us/article/minecraft-java-edition-26-1-1 Introduction: 0:00 Some news, probably: 0:11 Not news at all: 0:19 Shilling for my ...",
+    "host_name": "www.youtube.com",
+    "rank": 0,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1-1",
+    "name": "Minecraft Java Edition 26.1.1",
+    "snippet": "... 26.1.1, a hotfix release that addresses an important issue reported in the 26.1 release. Happy mining! Fixed bugs in 26.1.1. MC-307140 - Chat ...",
+    "host_name": "www.minecraft.net",
+    "rank": 1,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://minecraft.wiki/w/Java_Edition_26.1.1",
+    "name": "Java Edition 26.1.1 - Minecraft Wiki",
+    "snippet": "26.1.1 is a hotfix for Java Edition released on April 1, 2026, which fixes an issue with chat reporting. It is compatible with 26.1 servers.",
+    "host_name": "minecraft.wiki",
+    "rank": 2,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=zE0gW2ejiC0&vl=en",
+    "name": "Everything NEW In Minecraft 26.1 Update - YouTube",
+    "snippet": "Showing Everything New Mojang Added in the Minecraft 26.1 Update Tiny Takeover. They Added New Baby Mobs, Craftable Nametag, ...",
+    "host_name": "www.youtube.com",
+    "rank": 3,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://minecraft.fandom.com/wiki/Java_Edition_26.1",
+    "name": "Java Edition 26.1 - Minecraft Wiki - Fandom",
+    "snippet": "Java Edition 26.1, named Tiny Takeover, is a game drop for Java Edition, released on March 24, 2026. It is the first version to use the new YY.D.H version ...",
+    "host_name": "minecraft.fandom.com",
+    "rank": 4,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.reddit.com/r/Minecraft/comments/1s9he24/minecraft_java_edition_2611",
+    "name": "Minecraft Java Edition 26.1.1 - Reddit",
+    "snippet": "No, they changed the naming format. 26.1.1 is basically what 1.22.1 would have been. From now on the first number is the year.",
+    "host_name": "www.reddit.com",
+    "rank": 5,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://minecraft.wiki/w/Java_Edition_26.1.2",
+    "name": "Java Edition 26.1.2 - Minecraft Wiki",
+    "snippet": "26.1.2 is a hotfix for Java Edition released on April 9, 2026, which tweaks UI checkboxes and fixes an exploit. It is compatible with 26.1 and 26.1.1 servers.",
+    "host_name": "minecraft.wiki",
+    "rank": 6,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1",
+    "name": "Minecraft Java Edition 26.1",
+    "snippet": "Technical Changes · The Data Pack version is now 101.1 · The Resource Pack version is now 84 · Game executables are no longer obfuscated - see this ...",
+    "host_name": "www.minecraft.net",
+    "rank": 7,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://www.youtube.com/watch?v=49q_Hf_0-o8",
+    "name": "Exploits and Checkboxes - What's New in Minecraft 26.1.2? - YouTube",
+    "snippet": "... minecraft.net/en-us/article/minecraft-java-edition-26-1-2 Introduction: 0:00 Excuses, excuses: 0:09 Undisclosed exploit: 0:13 Checkboxes: 0 ...",
+    "host_name": "www.youtube.com",
+    "rank": 8,
+    "date": "",
+    "favicon": ""
+  },
+  {
+    "url": "https://crafty.gg/articles/minecraft-java-26-1-1-update",
+    "name": "Minecraft Java Edition 26.1.1 Update — Crafty",
+    "snippet": "The Minecraft 26.1.1 update fixes bug MC-307140, which prevented players from reporting chat messages when chat was enabled. This hotfix ...",
+    "host_name": "crafty.gg",
+    "rank": 9,
+    "date": "",
+    "favicon": ""
+  }
+]
