@@ -12,6 +12,7 @@ eclipse/
 .settings/
 .classpath
 .project
+.vscode/
 
 # OS
 .DS_Store
@@ -22,3 +23,20 @@ run/
 runs/
 logs/
 
+# Environment & Secrets
+.env
+.env.*
+
+# Search & Research artifacts (not part of the mod)
+search*.json
+raw_*.json
+example_*.json
+fabric_spec*.json
+fabric_modjson_spec*.json
+porting_docs.json
+
+# Build tool directories
+download/
+upload/
+skills/
+worklog.md

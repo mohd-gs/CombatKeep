@@ -28,8 +28,8 @@ dependencies {
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
         implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-        // Fabric API - needed for events (modImplementation ensures proper remapping)
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+        // Fabric API - needed for events (implementation ensures proper remapping)
+        implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
 
 processResources {
