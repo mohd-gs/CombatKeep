@@ -12,6 +12,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
@@ -108,13 +111,15 @@ public class CombatKeepMod implements ModInitializer {
                 registerRespawnCallback();
                 registerDisconnectCallback();
                 registerCombatTagChecker();
+                registerServerStopCleanup();
 
                 LOGGER.info("CombatKeep mod initialized!");
                 LOGGER.info("  - KeepInventory: enforced");
                 LOGGER.info("  - Combat tag: {} seconds", COMBAT_TAG_DURATION_SECONDS);
                 LOGGER.info("  - Combat death penalty: 50% inventory drop + all XP");
-                LOGGER.info("  - Protected items: armor, shulker boxes");
+                LOGGER.info("  - Protected items: armor, elytra, shulker boxes");
                 LOGGER.info("  - Combat quit penalty: same as combat death");
+                LOGGER.info("  - Solidus economy integration: {}", SolidusIntegration.isEnabled() ? "ENABLED (15% balance penalty)" : "disabled (Solidus not found)");
         }
 
         // ========== KeepInventory Enforcement ==========
@@ -181,24 +186,31 @@ public class CombatKeepMod implements ModInitializer {
                                 LOGGER.info("Player '{}' died while combat-tagged — {} items dropped immediately",
                                         player.getScoreboardName(), droppedSlots.size());
 
-                                // Remove combat tag from the OPPONENT too — the fight is over
+                                // ── Solidus Economy Integration ──
+                                // If Solidus is installed, deduct 15% of victim's balance → killer
                                 UUID opponentUuid = combatPartners.get(player.getUUID());
                                 if (opponentUuid != null) {
                                         MinecraftServer server = player.level().getServer();
                                         if (server != null) {
-                                                ServerPlayer opponent = server.getPlayerList().getPlayer(opponentUuid);
-                                                if (opponent != null) {
-                                                        removeCombatTag(opponent);
-                                                        opponent.sendSystemMessage(
+                                                ServerPlayer killer = server.getPlayerList().getPlayer(opponentUuid);
+                                                if (killer != null) {
+                                                        // Notify killer that fight is over
+                                                        removeCombatTag(killer);
+                                                        killer.sendSystemMessage(
                                                                 Component.literal("Your opponent died in combat! You are safe now.")
                                                                         .withStyle(ChatFormatting.GREEN)
                                                         );
+                                                        // Apply Solidus economy penalty if available
+                                                        if (SolidusIntegration.isEnabled()) {
+                                                                SolidusIntegration.applyDeathPenalty(player, killer);
+                                                        }
                                                 }
                                         }
                                         combatPartners.remove(opponentUuid);
                                         combatTaggedPlayers.remove(opponentUuid);
                                         bossBarManager.removeByUuid(opponentUuid);
                                 }
+                                // ──────────────────────────────────
 
                                 removeCombatTag(player);
                         } else {
@@ -361,6 +373,32 @@ public class CombatKeepMod implements ModInitializer {
                 });
         }
 
+        /**
+         * Clean up all in-memory tracking maps when the server stops.
+         * This prevents stale data from persisting across server restarts
+         * and avoids potential memory leaks if a server crash occurs.
+         */
+        private void registerServerStopCleanup() {
+                ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+                        int combatTags = combatTaggedPlayers.size();
+                        int partners = combatPartners.size();
+                        int pendingDeaths = pendingDeathPenalties.size();
+                        int bossBars = bossBarManager.getActiveBossBarCount();
+
+                        combatTaggedPlayers.clear();
+                        combatPartners.clear();
+                        pendingDeathPenalties.clear();
+
+                        // Clean all boss bars
+                        for (UUID uuid : new ArrayList<>(bossBarManager.getAllUuids())) {
+                                bossBarManager.removeByUuid(uuid);
+                        }
+
+                        LOGGER.info("Server stopped — cleaned up: {} combat tags, {} partners, {} pending deaths, {} boss bars",
+                                combatTags, partners, pendingDeaths, bossBars);
+                });
+        }
+
         // ========== Combat Tag Management ==========
 
         /**
@@ -515,23 +553,62 @@ public class CombatKeepMod implements ModInitializer {
 
         // ========== Utility Methods ==========
 
+        /**
+         * Get all inventory slots that are eligible for dropping on combat death.
+         * Protected items (not droppable):
+         * - Items in armor slots (36-39) — excluded by range
+         * - Armor items (any slot) — checked by type (ArmorItem)
+         * - Shulker boxes — checked by block type
+         * - Elytra — checked by item type (also protects from losing flight ability)
+         */
         private List<Integer> getDroppableSlots(ServerPlayer player) {
                 List<Integer> slots = new ArrayList<>();
                 Inventory inventory = player.getInventory();
 
+                // Main inventory + hotbar: slots 0-35
                 for (int i = 0; i < 36; i++) {
                         ItemStack stack = inventory.getItem(i);
-                        if (!stack.isEmpty() && !isShulkerBox(stack)) {
+                        if (!stack.isEmpty() && isDroppableItem(stack)) {
                                 slots.add(i);
                         }
                 }
 
+                // Offhand: slot 40
                 ItemStack offhand = inventory.getItem(40);
-                if (!offhand.isEmpty() && !isShulkerBox(offhand)) {
+                if (!offhand.isEmpty() && isDroppableItem(offhand)) {
                         slots.add(40);
                 }
 
                 return slots;
+        }
+
+        /**
+         * Check if an item is droppable (not protected) on combat death.
+         * Protected items: armor pieces (via Equippable component), shulker boxes, elytra.
+         * In MC 26.1.2+, armor is data-driven — items have an Equippable component
+         * rather than being instances of ArmorItem.
+         */
+        private boolean isDroppableItem(ItemStack stack) {
+                if (stack.isEmpty()) return false;
+
+                // Check Equippable component — if item is equippable in an armor slot, protect it
+                Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
+                if (equippable != null) {
+                        EquipmentSlot slot = equippable.slot();
+                        // Armor slots: HEAD, CHEST, LEGS, FEET
+                        if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
+                                return false;
+                        }
+                        // Also protect offhand-equippable items that function as armor (shields, etc.)
+                        // but allow weapons/tools in offhand to drop
+                }
+
+                // Shulker boxes — always protected
+                if (stack.getItem() instanceof BlockItem blockItem) {
+                        if (blockItem.getBlock() instanceof ShulkerBoxBlock) return false;
+                }
+
+                return true;
         }
 
         private boolean isShulkerBox(ItemStack stack) {
