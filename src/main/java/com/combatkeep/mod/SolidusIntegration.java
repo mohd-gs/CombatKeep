@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Method;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * Optional integration with the Solidus economy mod via SolidusAPI.
@@ -20,12 +21,17 @@ import java.util.concurrent.CompletableFuture;
  * and transfer it to the killer. Also applies economy penalty on combat-log.
  *
  * All percentages and minimums are read from {@link CombatKeepConfig}.
- * Transactions are logged as DEATH_PENALTY / DEATH_REWARD or
- * COMBAT_LOG_PENALTY / COMBAT_LOG_REWARD in the Solidus transaction log.
+ * Transactions are logged as DEATH_PENALTY / DEATH_REWARD in the Solidus
+ * transaction log.
  *
  * If Solidus is NOT installed, this class does nothing — zero impact.
  *
  * Uses reflection to access SolidusAPI so there is no compile-time dependency.
+ *
+ * IMPORTANT: Because SolidusAPI.getBalance() and transfer() are async
+ * (CompletableFuture), the penalty amount is not available synchronously.
+ * Callers must pass a {@link Consumer} callback to receive the actual
+ * transferred amount after the operation completes.
  */
 public class SolidusIntegration {
 
@@ -85,22 +91,26 @@ public class SolidusIntegration {
 	 * Apply the combat death economy penalty: deduct a configured percentage
 	 * of the victim's balance and transfer it to the killer atomically.
 	 *
-	 * @param victim The player who died in combat
-	 * @param killer The player who killed them
-	 * @return the penalty amount transferred (0 if no transfer occurred)
+	 * Because the balance lookup and transfer are async operations, the actual
+	 * penalty amount is delivered via the {@code onAmountTransferred} callback
+	 * (called on the server thread). If Solidus is not available or the
+	 * victim has no balance, the callback receives 0.0.
+	 *
+	 * @param victim              The player who died in combat
+	 * @param killer              The player who killed them
+	 * @param onAmountTransferred Callback receiving the actual amount transferred
 	 */
-	public static double applyDeathPenalty(ServerPlayer victim, ServerPlayer killer) {
-		if (!MOD_LOADED) return 0;
+	public static void applyDeathPenalty(ServerPlayer victim, ServerPlayer killer,
+					     Consumer<Double> onAmountTransferred) {
+		if (!MOD_LOADED) { onAmountTransferred.accept(0.0); return; }
 		resolveApi();
-		if (apiInstance == null) return 0;
+		if (apiInstance == null) { onAmountTransferred.accept(0.0); return; }
 
 		double penaltyPercent = CombatKeepConfig.getInstance().getSolidusDeathPenaltyPercent() / 100.0;
-		if (penaltyPercent <= 0) return 0;
+		if (penaltyPercent <= 0) { onAmountTransferred.accept(0.0); return; }
 
 		MinecraftServer server = victim.level().getServer();
-		if (server == null) return 0;
-
-		final double[] resultAmount = {0.0};
+		if (server == null) { onAmountTransferred.accept(0.0); return; }
 
 		try {
 			Class<?> apiClass = Class.forName("com.solidus.api.SolidusAPI");
@@ -112,16 +122,14 @@ public class SolidusIntegration {
 				(CompletableFuture<Double>) getBalance.invoke(apiInstance, victim);
 
 			balanceFuture.thenAccept(balance -> {
-				// Calculate penalty with minimum enforcement
 				double penalty = calculatePenalty(balance, penaltyPercent);
 
 				if (penalty <= 0) {
 					LOGGER.debug("Victim '{}' has zero balance — no economy penalty to apply",
 						victim.getScoreboardName());
+					server.execute(() -> onAmountTransferred.accept(0.0));
 					return;
 				}
-
-				resultAmount[0] = penalty;
 
 				try {
 					@SuppressWarnings("unchecked")
@@ -138,19 +146,26 @@ public class SolidusIntegration {
 								Component.literal("Earned " + String.format("%.2f", penalty) + " from killing " + victim.getScoreboardName())
 									.withStyle(ChatFormatting.GOLD)
 							);
+
+							// Deliver the actual amount on the server thread
+							onAmountTransferred.accept(penalty);
 						});
 
-						logTransactions(victim, killer, penalty, server, "DEATH_PENALTY", "DEATH_REWARD",
+						logTransactions(victim, killer, penalty, server,
+							"DEATH_PENALTY", "DEATH_REWARD",
 							"Combat death penalty", "Combat kill reward");
 					}).exceptionally(ex -> {
 						LOGGER.error("Failed to transfer balance via SolidusAPI.transfer()", ex);
+						server.execute(() -> onAmountTransferred.accept(0.0));
 						return null;
 					});
 				} catch (Exception e) {
 					LOGGER.error("Failed to invoke SolidusAPI.transfer()", e);
+					server.execute(() -> onAmountTransferred.accept(0.0));
 				}
 			}).exceptionally(ex -> {
 				LOGGER.error("Failed to get victim balance from SolidusAPI.getBalance()", ex);
+				server.execute(() -> onAmountTransferred.accept(0.0));
 				return null;
 			});
 
@@ -159,13 +174,14 @@ public class SolidusIntegration {
 
 		} catch (ClassNotFoundException e) {
 			LOGGER.warn("SolidusAPI class not found — integration disabled");
+			onAmountTransferred.accept(0.0);
 		} catch (NoSuchMethodException e) {
 			LOGGER.warn("SolidusAPI method not found — integration disabled");
+			onAmountTransferred.accept(0.0);
 		} catch (Exception e) {
 			LOGGER.error("Unexpected error applying Solidus combat death penalty", e);
+			onAmountTransferred.accept(0.0);
 		}
-
-		return resultAmount[0];
 	}
 
 	// ========== Combat Log Penalty ==========
@@ -174,22 +190,21 @@ public class SolidusIntegration {
 	 * Apply economy penalty when a player combat-logs: deduct a configured
 	 * percentage of the combat-logger's balance and transfer to their opponent.
 	 *
-	 * @param combatLogger The player who disconnected while combat-tagged
-	 * @param opponent     The player who was left in combat
-	 * @return the penalty amount transferred (0 if no transfer occurred)
+	 * @param combatLogger        The player who disconnected while combat-tagged
+	 * @param opponent            The player who was left in combat
+	 * @param onAmountTransferred Callback receiving the actual amount transferred
 	 */
-	public static double applyCombatLogPenalty(ServerPlayer combatLogger, ServerPlayer opponent) {
-		if (!MOD_LOADED) return 0;
+	public static void applyCombatLogPenalty(ServerPlayer combatLogger, ServerPlayer opponent,
+						 Consumer<Double> onAmountTransferred) {
+		if (!MOD_LOADED) { onAmountTransferred.accept(0.0); return; }
 		resolveApi();
-		if (apiInstance == null) return 0;
+		if (apiInstance == null) { onAmountTransferred.accept(0.0); return; }
 
 		double penaltyPercent = CombatKeepConfig.getInstance().getSolidusDeathPenaltyPercent() / 100.0;
-		if (penaltyPercent <= 0) return 0;
+		if (penaltyPercent <= 0) { onAmountTransferred.accept(0.0); return; }
 
 		MinecraftServer server = combatLogger.level().getServer();
-		if (server == null) return 0;
-
-		final double[] resultAmount = {0.0};
+		if (server == null) { onAmountTransferred.accept(0.0); return; }
 
 		try {
 			Class<?> apiClass = Class.forName("com.solidus.api.SolidusAPI");
@@ -206,10 +221,9 @@ public class SolidusIntegration {
 				if (penalty <= 0) {
 					LOGGER.debug("Combat-logger '{}' has zero balance — no economy penalty",
 						combatLogger.getScoreboardName());
+					server.execute(() -> onAmountTransferred.accept(0.0));
 					return;
 				}
-
-				resultAmount[0] = penalty;
 
 				try {
 					@SuppressWarnings("unchecked")
@@ -222,6 +236,8 @@ public class SolidusIntegration {
 								Component.literal(combatLogger.getScoreboardName() + " combat-logged! You received " + String.format("%.2f", penalty))
 									.withStyle(ChatFormatting.GOLD)
 							);
+
+							onAmountTransferred.accept(penalty);
 						});
 
 						logTransactions(combatLogger, opponent, penalty, server,
@@ -229,13 +245,16 @@ public class SolidusIntegration {
 							"Combat-log penalty", "Combat-log reward");
 					}).exceptionally(ex -> {
 						LOGGER.error("Failed to transfer combat-log penalty via SolidusAPI", ex);
+						server.execute(() -> onAmountTransferred.accept(0.0));
 						return null;
 					});
 				} catch (Exception e) {
 					LOGGER.error("Failed to invoke SolidusAPI.transfer() for combat-log penalty", e);
+					server.execute(() -> onAmountTransferred.accept(0.0));
 				}
 			}).exceptionally(ex -> {
 				LOGGER.error("Failed to get combat-logger balance from SolidusAPI", ex);
+				server.execute(() -> onAmountTransferred.accept(0.0));
 				return null;
 			});
 
@@ -244,9 +263,8 @@ public class SolidusIntegration {
 
 		} catch (Exception e) {
 			LOGGER.error("Unexpected error applying Solidus combat-log penalty", e);
+			onAmountTransferred.accept(0.0);
 		}
-
-		return resultAmount[0];
 	}
 
 	// ========== Penalty Calculation ==========

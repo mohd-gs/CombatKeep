@@ -102,14 +102,18 @@ public class CombatBossBarManager {
                 float progress = calculateProgress(remainingSeconds);
                 bossBar.setProgress(progress);
 
-                // Update color and text based on remaining time
-                if (remainingSeconds <= 3) {
+                // Update color and text based on remaining time (relative thresholds)
+                int tagDuration = CombatKeepMod.getCombatTagDurationSeconds();
+                int yellowThreshold = Math.max(3, tagDuration / 2); // 50% of duration, min 3s
+                int whiteThreshold = Math.max(1, tagDuration / 5);  // 20% of duration, min 1s
+
+                if (remainingSeconds <= whiteThreshold) {
                         bossBar.setColor(BossEvent.BossBarColor.WHITE);
                         bossBar.setName(
                                 Component.literal("⚠ COMBAT ENDING: " + remainingSeconds + "s ⚠")
                                         .withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)
                         );
-                } else if (remainingSeconds <= 7) {
+                } else if (remainingSeconds <= yellowThreshold) {
                         bossBar.setColor(BossEvent.BossBarColor.YELLOW);
                         bossBar.setName(
                                 Component.literal("⚔ Combat Tag: " + remainingSeconds + "s")
