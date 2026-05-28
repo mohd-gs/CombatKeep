@@ -128,9 +128,10 @@ public class CombatBossBarManager {
          * Calculate the boss bar progress (0.0 to 1.0) based on remaining time.
          */
         private float calculateProgress(int remainingSeconds) {
+                int maxDuration = CombatKeepMod.getCombatTagDurationSeconds();
                 if (remainingSeconds <= 0) return 0.0f;
-                if (remainingSeconds >= CombatKeepMod.COMBAT_TAG_DURATION_SECONDS) return 1.0f;
-                return (float) remainingSeconds / CombatKeepMod.COMBAT_TAG_DURATION_SECONDS;
+                if (remainingSeconds >= maxDuration) return 1.0f;
+                return (float) remainingSeconds / maxDuration;
         }
 
         /**

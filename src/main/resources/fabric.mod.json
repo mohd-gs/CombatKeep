@@ -3,7 +3,7 @@
         "id": "combatkeep",
         "version": "${version}",
         "name": "CombatKeep",
-        "description": "A server-side Fabric mod that enables KeepInventory with combat penalties. Players in combat lose 50% of their items if they die or log out during a fight. Solidus integration adds a 10% balance penalty transferred to the killer.",
+        "description": "A server-side Fabric mod that enables KeepInventory with combat penalties. Configurable item drop, respawn immunity, combat stats, and Solidus economy integration with 10% balance penalty on kill.",
         "authors": [
                 "MOHD_Gs"
         ],

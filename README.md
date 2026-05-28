@@ -5,84 +5,105 @@
 [![Solidus Integrated](https://img.shields.io/badge/Solidus-Integrated-8B5CF6?style=flat-square)](https://github.com/mohammad-salah-qasiaa/solidus)
 [![Platform](https://img.shields.io/badge/Platform-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21%2B-8B5CF6.svg?style=flat-square)](https://www.minecraft.net/)
+[![Version](https://img.shields.io/badge/Version-1.1.0-orange.svg?style=flat-square)](https://github.com/mohammad-salah-qasiaa/CombatKeep/releases)
 [![Server Side](https://img.shields.io/badge/Side-Server--Only-red.svg?style=flat-square)](https://fabricmc.net/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 **Keep your items. Pay the price if you die fighting.**
 
-A server-side Fabric mod that enables permanent KeepInventory while adding meaningful PvP consequences — players who die in combat lose 50% of their items, and 10% of their balance is automatically transferred to the killer via Solidus Core.
+A server-side Fabric mod that enables permanent KeepInventory with meaningful PvP consequences — configurable item drops, 10% balance transfer to the killer via Solidus Core, respawn immunity, and full combat statistics tracking.
 
 </div>
-
----
-
-## How It Works
-
-On most servers, KeepInventory either makes the game too easy or it's disabled entirely. **CombatKeep** finds the middle ground:
-
-- You always keep your items on death — no more losing your gear to lava or a creeper
-- But if you die **while fighting another player**, you drop 50% of your items on the spot
-- **10% of your balance** is deducted and automatically sent to the player who killed you (requires Solidus Core)
-- If you **log out to escape a fight** — you're treated as if you died in combat
-
-Fair survival. Meaningful PvP consequences. Economy-driven combat.
 
 ---
 
 ## Features
 
 ### KeepInventory — Always On
-
-- Automatically enforced on all worlds at startup — cannot be overridden, even by operators
-- On normal death (outside combat): only XP is lost, all items are kept
+- Automatically enforced on all worlds — cannot be overridden by operators
+- Normal death (outside combat): only XP is lost
 
 ### Combat Tag System
+- Hitting another player activates a **combat tag** (default: 15 seconds, configurable)
+- Timer **resets** on each hit between the tagged players
+- **Boss Bar** shows remaining time with color transitions:
 
-- Hitting another player activates a **15-second combat tag** on both players
-- The timer **resets** every time either player lands a hit
-- A **Boss Bar** appears at the top of the screen showing remaining combat time
-
-| Time Remaining | Boss Bar Color |
+| Time Remaining | Color |
 |---|---|
 | More than 7 seconds | Red |
 | 7 seconds or less | Yellow |
 | 3 seconds or less | White (blinking) |
 
 ### Combat Death Penalty
-
 When a player dies while combat-tagged:
-
 - Loses **all XP**
-- Loses **50% of inventory items** (dropped at the death location, claimable by anyone)
-- Items are selected **randomly** from the inventory
-- **Protected from dropping:**
-  - Currently worn armor (all armor slots)
-  - Elytra
-  - All Shulker Boxes (any color)
+- Loses a **configurable percentage** of inventory items (default: 50%, dropped at death location)
+- Items selected **randomly** from inventory
+- **Protected from dropping:** Armor, Elytra, Shulker Boxes
+
+### Respawn Immunity
+After dying in combat, the player receives a **10-second immunity** period (configurable):
+- Immunity **prevents combat tagging** — the player cannot enter a new fight
+- Immunity does **NOT prevent damage** — the player can still be attacked and take damage
+- Countdown shown on the action bar
+- Expiry announced in chat
 
 ### Solidus Economy Integration
 
 [![Solidus Integrated](https://img.shields.io/badge/Solidus-Integrated-8B5CF6?style=flat-square)](https://github.com/mohammad-salah-qasiaa/solidus)
 
-When a player kills another player in combat, **10% of the victim's balance is automatically deducted and transferred to the killer** via Solidus Core's API. This integration is fully optional — if Solidus is not installed, CombatKeep functions normally without economy penalties.
+When a player kills another player in combat, **10% of the victim's balance is automatically deducted and transferred to the killer** via Solidus Core's API. This also applies when a player **combat-logs** (disconnects during a fight).
 
-**How the transfer works:**
-1. Victim dies in combat → system reads their balance via `SolidusAPI.getBalance()`
-2. 10% is calculated (rounded down to 2 decimal places)
-3. `SolidusAPI.transfer()` performs an atomic victim-to-killer transfer
-4. Both players are notified with the exact amount
-5. Transactions are logged as `DEATH_PENALTY` and `DEATH_REWARD` in Solidus
+**Transfer details:**
+- Percentage and minimum amount are configurable
+- `SolidusAPI.transfer()` performs an atomic victim-to-killer transfer
+- Both players are notified with the exact amount
+- Transactions logged as `DEATH_PENALTY` / `DEATH_REWARD` in Solidus
 
 **Example:** Player with 1,000 coins dies in combat → 100 coins transferred to the killer.
 
-> Uses reflection to access SolidusAPI — no compile-time dependency on Solidus. Zero impact if Solidus is not installed.
+> Uses reflection to access SolidusAPI — no compile-time dependency. Zero impact if Solidus is not installed.
+
+### Combat Statistics
+Full combat stats tracked per player and persisted across restarts:
+- **Kills / Deaths / K/D Ratio**
+- **Current Kill Streak / Best Kill Streak**
+- **Economy Gained / Lost** from combat (requires Solidus)
+
+Stats are saved every 5 minutes and on server stop.
 
 ### Combat Logging Penalty
-
 If a player disconnects while combat-tagged:
 - Treated as a **combat surrender**
-- Same penalty as dying in combat: all XP lost + 50% of items dropped at their last known position
-- Armor, Elytra, and Shulker Boxes are exempt
+- Same item/XP penalty as dying in combat
+- **Solidus economy penalty** also applies (10% balance transferred to opponent)
+
+### Admin Commands
+All commands require OP level 3+:
+
+| Command | Description |
+|---|---|
+| `/combatkeep status <player>` | Show combat tag + immunity status |
+| `/combatkeep stats [player]` | View combat statistics (kills, deaths, K/D, streaks, economy) |
+| `/combatkeep immunity <player>` | Check respawn immunity status |
+| `/combatkeep reload` | Reload configuration from disk |
+
+---
+
+## Configuration
+
+Auto-generated on first run at `config/combatkeep/combatkeep.properties`:
+
+| Property | Default | Range | Description |
+|---|---|---|---|
+| `combatTagDurationSeconds` | 15 | 5–60 | Combat tag duration in seconds |
+| `combatDeathDropPercent` | 50 | 10–100 | Percentage of items to drop on combat death |
+| `solidusDeathPenaltyPercent` | 10 | 0–50 | Percentage of victim balance to transfer to killer (0 = disabled) |
+| `solidusMinPenalty` | 0 | 0+ | Minimum penalty — if percentage is below this and balance > 0, charge this instead |
+| `respawnImmunitySeconds` | 10 | 0–30 | Respawn immunity duration (0 = disabled) |
+| `solidusCombatLogPenalty` | true | true/false | Whether to apply Solidus economy penalty on combat-log |
+
+> Changes require `/combatkeep reload` or a server restart to take effect.
 
 ---
 
@@ -94,7 +115,7 @@ If a player disconnects while combat-tagged:
 | Fabric Loader | >= 0.19.2 |
 | Fabric API | 0.149.1+26.1.2 |
 | Java | 25+ |
-| **Solidus Core** | Optional — enables 10% balance transfer on kill |
+| **Solidus Core** | Optional — enables balance transfer on kill |
 
 > No client-side installation required. Players can join with a vanilla client.
 
@@ -104,7 +125,7 @@ If a player disconnects while combat-tagged:
 
 1. Make sure **Fabric Loader 0.19.2+** is installed on your server
 2. Download **Fabric API** for 26.1.x from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
-3. Place `combatkeep-1.0.0.jar` and Fabric API `.jar` into your server's `mods/` folder
+3. Place `combatkeep-1.1.0.jar` and Fabric API `.jar` into your server's `mods/` folder
 4. *(Optional)* Install [Solidus Core](https://github.com/mohammad-salah-qasiaa/solidus) to enable economy integration
 5. Restart the server — that's it!
 
@@ -115,28 +136,47 @@ If a player disconnects while combat-tagged:
 ```
 Player A hits Player B
         |
-Combat Tag activated on BOTH players (15 seconds)
+Combat Tag activated on BOTH players (configurable duration)
         |
     +---------------------------+
     |  Either player hits:      |
-    |  Timer resets to 15 sec   |
+    |  Timer resets             |
     +---------------------------+
         |
-+------------------+-----------------------+
-| Death in combat  | Timer expires safely  |
-+------------------+-----------------------+
-| All XP lost      | No penalty            |
-| 50% items drop   | Combat Tag removed    |
-| 10% balance →    |                       |
-|   killer (Solidus)|                      |
-+------------------+-----------------------+
++------------------+-----------------------+-------------------+
+| Death in combat  | Timer expires safely  | Player disconnects|
++------------------+-----------------------+-------------------+
+| All XP lost      | No penalty            | All XP lost       |
+| X% items drop    | Combat Tag removed    | X% items drop     |
+| 10% balance →    |                       | 10% balance →     |
+|   killer (Solidus)|                      |   opponent*       |
+| Stats recorded   |                       | Stats recorded    |
++------------------+-----------------------+-------------------+
 
-+------------------------------------------+
-| Player disconnects during combat tag     |
-| Same penalty as dying in combat          |
-| (items + XP, no balance penalty since    |
-|  killer may be offline)                  |
-+------------------------------------------+
+* Economy penalty on combat-log only if opponent is online and Solidus is enabled
+
+After combat death:
+    Respawn Immunity (10s) → cannot be combat-tagged, CAN take damage
+```
+
+---
+
+## File Structure
+
+```
+config/combatkeep/
+├── combatkeep.properties    ← Configuration (auto-generated)
+└── stats.json               ← Combat statistics (auto-generated, persisted)
+
+src/main/java/com/combatkeep/mod/
+├── CombatKeepMod.java          # Main mod entry point
+├── CombatKeepConfig.java       # Configuration manager
+├── CombatKeepCommand.java      # Admin commands
+├── CombatBossBarManager.java   # Boss Bar display
+├── RespawnImmunityManager.java # Respawn immunity tracking
+├── CombatStatsManager.java     # Stats persistence (Gson/JSON)
+├── PlayerStats.java            # Stats data class
+└── SolidusIntegration.java     # Solidus economy integration
 ```
 
 ---
@@ -149,7 +189,7 @@ Combat Tag activated on BOTH players (15 seconds)
 git clone https://github.com/mohammad-salah-qasiaa/CombatKeep.git
 cd CombatKeep
 ./gradlew build
-# Output: build/libs/combatkeep-1.0.0.jar
+# Output: build/libs/combatkeep-1.1.0.jar
 ```
 
 ---
