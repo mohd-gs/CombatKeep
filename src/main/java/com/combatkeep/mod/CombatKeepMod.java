@@ -119,7 +119,7 @@ public class CombatKeepMod implements ModInitializer {
                 LOGGER.info("  - Combat death penalty: 50% inventory drop + all XP");
                 LOGGER.info("  - Protected items: armor, elytra, shulker boxes");
                 LOGGER.info("  - Combat quit penalty: same as combat death");
-                LOGGER.info("  - Solidus economy integration: {}", SolidusIntegration.isEnabled() ? "ENABLED (15% balance penalty)" : "disabled (Solidus not found)");
+                LOGGER.info("  - Solidus economy integration: {}", SolidusIntegration.isEnabled() ? "ENABLED (10% balance penalty)" : "disabled (Solidus not found)");
         }
 
         // ========== KeepInventory Enforcement ==========

@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
  * Optional integration with the Solidus economy mod via SolidusAPI.
  *
  * If Solidus is installed on the same server, CombatKeep will automatically
- * deduct 15% of the victim's balance on combat death and transfer it to the killer.
+ * deduct 10% of the victim's balance on combat death and transfer it to the killer.
  * Transactions are logged as DEATH_PENALTY and DEATH_REWARD in the Solidus transaction log.
  *
  * If Solidus is NOT installed, this class does nothing — zero impact.
@@ -43,8 +43,8 @@ public class SolidusIntegration {
         private static final boolean MOD_LOADED =
                         FabricLoader.getInstance().isModLoaded("solidus");
 
-        /** Percentage of victim's balance to deduct on combat death (0.15 = 15%) */
-        private static final double PENALTY_PERCENT = 0.15;
+        /** Percentage of victim's balance to deduct on combat death (0.10 = 10%) */
+        private static final double PENALTY_PERCENT = 0.10;
 
         /** Cached SolidusAPI instance (resolved lazily on first use) */
         private static Object apiInstance = null;
@@ -100,7 +100,7 @@ public class SolidusIntegration {
         // ========== Death Penalty ==========
 
         /**
-         * Apply the combat death economy penalty: deduct 15% of the victim's
+         * Apply the combat death economy penalty: deduct 10% of the victim's
          * balance and transfer it to the killer atomically.
          *
          * Uses SolidusAPI.transfer() for an atomic victim→killer transfer,
@@ -131,7 +131,7 @@ public class SolidusIntegration {
                                         (CompletableFuture<Double>) getBalance.invoke(apiInstance, victim);
 
                         balanceFuture.thenAccept(balance -> {
-                                // Calculate penalty: 15% of balance, rounded down to 2 decimal places
+                                // Calculate penalty: 10% of balance, rounded down to 2 decimal places
                                 double penalty = Math.floor(balance * PENALTY_PERCENT * 100) / 100;
                                 if (penalty <= 0) {
                                         LOGGER.debug("Victim '{}' has zero balance — no economy penalty to apply",
@@ -149,7 +149,7 @@ public class SolidusIntegration {
                                                 // Step 3: Notify both players on the server thread
                                                 server.execute(() -> {
                                                         victim.sendSystemMessage(
-                                                                        Component.literal("You lost 15% of your balance in combat: -" + String.format("%.2f", penalty))
+                                                                        Component.literal("You lost 10% of your balance in combat: -" + String.format("%.2f", penalty))
                                                                                         .withStyle(ChatFormatting.RED)
                                                         );
                                                         killer.sendSystemMessage(
