@@ -2,10 +2,10 @@
 
 # CombatKeep
 
-[![Solidus Integrated](https://img.shields.io/badge/Solidus-Integrated-8B5CF6?style=flat-square)](https://github.com/mohammad-salah-qasiaa/solidus)
+[![Solidus Integrated](https://img.shields.io/badge/Solidus-Integrated-8B5CF6?style=flat-square)](https://github.com/mohd-gs/solidus-core)
 [![Platform](https://img.shields.io/badge/Platform-Fabric-blue.svg?style=flat-square)](https://fabricmc.net/)
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.21%2B-8B5CF6.svg?style=flat-square)](https://www.minecraft.net/)
-[![Version](https://img.shields.io/badge/Version-1.1.0-orange.svg?style=flat-square)](https://github.com/mohammad-salah-qasiaa/CombatKeep/releases)
+[![Version](https://img.shields.io/badge/Version-1.1.0-orange.svg?style=flat-square)](https://github.com/mohd-gs/CombatKeep/releases)
 [![Server Side](https://img.shields.io/badge/Side-Server--Only-red.svg?style=flat-square)](https://fabricmc.net/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
@@ -50,7 +50,7 @@ After dying in combat, the player receives a **10-second immunity** period (conf
 
 ### Solidus Economy Integration
 
-[![Solidus Integrated](https://img.shields.io/badge/Solidus-Integrated-8B5CF6?style=flat-square)](https://github.com/mohammad-salah-qasiaa/solidus)
+[![Solidus Integrated](https://img.shields.io/badge/Solidus-Integrated-8B5CF6?style=flat-square)](https://github.com/mohd-gs/solidus-core)
 
 When a player kills another player in combat, **10% of the victim's balance is automatically deducted and transferred to the killer** via Solidus Core's API. This also applies when a player **combat-logs** (disconnects during a fight).
 
@@ -126,7 +126,7 @@ Auto-generated on first run at `config/combatkeep/combatkeep.properties`:
 1. Make sure **Fabric Loader 0.19.2+** is installed on your server
 2. Download **Fabric API** for 26.1.x from [Modrinth](https://modrinth.com/mod/fabric-api) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 3. Place `combatkeep-1.1.0.jar` and Fabric API `.jar` into your server's `mods/` folder
-4. *(Optional)* Install [Solidus Core](https://github.com/mohammad-salah-qasiaa/solidus) to enable economy integration
+4. *(Optional)* Install [Solidus Core](https://github.com/mohd-gs/solidus-core) to enable economy integration
 5. Restart the server — that's it!
 
 ---
@@ -186,7 +186,7 @@ src/main/java/com/combatkeep/mod/
 **Requirements:** JDK 25, Git
 
 ```bash
-git clone https://github.com/mohammad-salah-qasiaa/CombatKeep.git
+git clone https://github.com/mohd-gs/CombatKeep.git
 cd CombatKeep
 ./gradlew build
 # Output: build/libs/combatkeep-1.1.0.jar
@@ -201,5 +201,5 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 ---
 
 <div align="center">
-Made with coffee by <b>MOHD_Gs</b> — Part of the <a href="https://github.com/mohammad-salah-qasiaa/solidus">Solidus</a> ecosystem
+Made with coffee by <b>MOHD_Gs</b> — Part of the <a href="https://github.com/mohd-gs/solidus-core">Solidus</a> ecosystem
 </div>
