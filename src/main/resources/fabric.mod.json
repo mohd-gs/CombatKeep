@@ -7,7 +7,10 @@
         "authors": [
                 "MOHD_Gs"
         ],
-        "contact": {},
+        "contact": {
+                "homepage": "https://modrinth.com/user/MOHD_Gs",
+                "sources": "https://github.com/mohd-gs/CombatKeep"
+        },
         "license": "MIT",
         "icon": "assets/combatkeep/icon.png",
         "environment": "server",
