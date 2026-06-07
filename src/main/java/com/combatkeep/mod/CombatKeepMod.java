@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * CombatKeep — A server-side Fabric mod for Minecraft 26.1.x
@@ -56,15 +57,15 @@ public class CombatKeepMod implements ModInitializer {
         // ========== Combat Tracking ==========
 
         /** Players currently in combat: UUID -> combat end tick (game ticks) */
-        private static final Map<UUID, Long> combatTaggedPlayers = new HashMap<>();
+        private static final Map<UUID, Long> combatTaggedPlayers = new ConcurrentHashMap<>();
 
         /** Combat pairs: player UUID -> opponent UUID */
-        private static final Map<UUID, UUID> combatPartners = new HashMap<>();
+        private static final Map<UUID, UUID> combatPartners = new ConcurrentHashMap<>();
 
         // ========== Death Data Tracking ==========
 
         /** Data about players who died and need penalty processing on respawn */
-        private static final Map<UUID, DeathData> pendingDeathPenalties = new HashMap<>();
+        private static final Map<UUID, DeathData> pendingDeathPenalties = new ConcurrentHashMap<>();
 
         /** Boss bar manager */
         private static CombatBossBarManager bossBarManager;
@@ -436,17 +437,16 @@ public class CombatKeepMod implements ModInitializer {
         private void registerCombatTagChecker() {
                 ServerTickEvents.END_SERVER_TICK.register(server -> {
                         long currentTick = server.getTickCount();
-                        Iterator<Map.Entry<UUID, Long>> iterator = combatTaggedPlayers.entrySet().iterator();
-
-                        while (iterator.hasNext()) {
-                                Map.Entry<UUID, Long> entry = iterator.next();
+                        // Use a snapshot of entries to avoid ConcurrentModificationException
+                        // if the map is modified during iteration (e.g., player disconnect)
+                        for (var entry : new ArrayList<>(combatTaggedPlayers.entrySet())) {
                                 UUID uuid = entry.getKey();
                                 long endTick = entry.getValue();
 
                                 ServerPlayer player = server.getPlayerList().getPlayer(uuid);
 
                                 if (currentTick >= endTick) {
-                                        iterator.remove();
+                                        combatTaggedPlayers.remove(uuid);
                                         combatPartners.remove(uuid);
 
                                         if (player != null) {
